@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة نطاقات السعودة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0f4ff;
+  --muted: #6b7a99;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
+  --platinum: #e2c97e;
+  --high-green: #22c55e;
+  --mid-green: #4ade80;
+  --low-green: #86efac;
+  --red: #ef4444;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: radial-gradient(ellipse 80% 50% at 20% 10%, rgba(59,130,246,0.07) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 90%, rgba(34,197,94,0.05) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
+}
+header {
+  position:sticky; top:0; z-index:100;
+  padding:18px 40px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  background:rgba(10,14,26,0.85);
+}
+.logo { display:flex; align-items:center; gap:12px; }
+.logo-icon {
+  width:40px; height:40px;
+  background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+.logo h1 { font-family:'Tajawal',sans-serif; font-size:18px; font-weight:800; }
+.logo p { font-size:11px; color:var(--muted); }
+.formula-badge {
+  background:rgba(59,130,246,0.1);
+  border:1px solid rgba(59,130,246,0.25);
+  color:var(--accent2);
+  padding:5px 14px; border-radius:20px;
+  font-size:12px; font-family:monospace;
+}
+.page { padding:32px 40px 60px; position:relative; z-index:1; max-width:1400px; margin:0 auto; }
+.kpi-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px; margin-bottom:36px;
+}
+.kpi {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:18px;
+  position:relative; overflow:hidden;
+  transition:transform .2s;
+}
+.kpi:hover { transform:translateY(-2px); }
+.kpi::before {
+  content:''; position:absolute; top:-20px; right:-20px;
+  width:70px; height:70px; border-radius:50%; opacity:.1;
+}
+.kpi.blue::before { background:var(--accent); }
+.kpi.green::before { background:var(--high-green); }
+.kpi.gold::before { background:var(--platinum); }
+.kpi.red::before { background:var(--red); }
+.kpi-label { font-size:11px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.4px; }
+.kpi-val { font-family:'Tajawal',sans-serif; font-size:28px; font-weight:900; letter-spacing:-1px; }
+.kpi.blue .kpi-val { color:var(--accent2); }
+.kpi.green .kpi-val { color:var(--high-green); }
+.kpi.gold .kpi-val { color:var(--platinum); }
+.kpi.red .kpi-val { color:#f87171; }
+.section-title {
+  font-family:'Tajawal',sans-serif; font-size:16px; font-weight:700;
+  margin-bottom:16px; display:flex; align-items:center; gap:10px;
+}
+.section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.companies-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:18px; margin-bottom:32px; }
+.company-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; overflow:hidden;
+  transition:transform .2s, border-color .2s;
+}
+.company-card:hover { transform:translateY(-2px); border-color:rgba(59,130,246,.25); }
+.cc-header {
+  padding:16px 20px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:12px;
+}
+.cc-header input[type=text] {
+  background:none; border:none; outline:none;
+  color:var(--text); font-family:'Cairo',sans-serif;
+  font-size:15px; font-weight:700; flex:1;
+  border-bottom:1px solid transparent;
+  padding-bottom:2px; transition:border-color .2s;
+}
+.cc-header input[type=text]:focus { border-bottom-color:var(--accent); }
+.remove-btn {
+  background:none; border:1px solid var(--border);
+  color:var(--muted); border-radius:8px;
+  padding:4px 10px; font-size:11px; cursor:pointer;
+  font-family:'Cairo',sans-serif; transition:all .15s;
+}
+.remove-btn:hover { border-color:#f87171; color:#f87171; }
+.cc-body { padding:16px 20px; }
+.field-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px; }
+.field-full { grid-column:span 3; }
+.field label { display:block; font-size:11px; color:var(--muted); margin-bottom:4px; }
+select, input[type=number] {
+  width:100%;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:8px; padding:8px 10px;
+  color:var(--text); font-family:'Cairo',sans-serif; font-size:13px;
+  outline:none; transition:border-color .2s;
+}
+select:focus, input[type=number]:focus { border-color:var(--accent); }
+input[readonly] { opacity:.5; cursor:default; }
+.result-box {
+  background:var(--surface2); border-radius:12px;
+  padding:14px 16px;
+}
+.res-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+.pct-big { font-family:'Tajawal',sans-serif; font-size:28px; font-weight:900; }
+.nitaq-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:12px; font-weight:700;
+  padding:5px 12px; border-radius:8px;
+}
+.nb-platinum { background:rgba(226,201,126,.12); border:1px solid rgba(226,201,126,.3); color:var(--platinum); }
+.nb-high     { background:rgba(34,197,94,.1);    border:1px solid rgba(34,197,94,.3);  color:var(--high-green); }
+.nb-mid      { background:rgba(74,222,128,.08);  border:1px solid rgba(74,222,128,.25); color:var(--mid-green); }
+.nb-low      { background:rgba(134,239,172,.08); border:1px solid rgba(134,239,172,.2); color:var(--low-green); }
+.nb-red      { background:rgba(239,68,68,.1);    border:1px solid rgba(239,68,68,.3);   color:var(--red); }
+.bar-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); margin-bottom:4px; }
+.bar-track  { height:8px; background:rgba(255,255,255,.05); border-radius:4px; overflow:hidden; }
+.bar-fill   { height:100%; border-radius:4px; transition:width .5s cubic-bezier(.4,0,.2,1); }
+.thresholds { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-top:12px; }
+.thresh {
+  border:1px solid var(--border); border-radius:8px;
+  padding:6px 4px; text-align:center; transition:all .2s;
+}
+.thresh.active { border-width:1.5px; }
+.thresh .tl { font-size:9px; color:var(--muted); margin-bottom:2px; }
+.thresh .tv { font-size:10px; font-weight:700; }
+.upgrade-hint {
+  margin-top:10px; padding:8px 12px;
+  border-radius:8px; border:1px solid;
+  font-size:12px; line-height:1.6;
+}
+.add-btn {
+  width:100%; padding:12px;
+  border:1px dashed var(--border);
+  border-radius:16px; background:none;
+  color:var(--muted); font-size:13px; font-family:'Cairo',sans-serif;
+  cursor:pointer; margin-bottom:32px; transition:all .2s;
+}
+.add-btn:hover { background:var(--surface); color:var(--text); border-color:var(--accent); }
+.table-wrap {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; overflow:hidden; margin-bottom:32px;
+}
+.table-bar {
+  padding:14px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.table-bar h3 { font-size:14px; font-weight:700; }
+.search-input {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px;
+  color:var(--text); font-family:'Cairo',sans-serif;
+  font-size:12px; outline:none; width:200px; direction:rtl;
+}
+.search-input:focus { border-color:var(--accent); }
+.tbl-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; }
+thead th {
+  padding:10px 14px; font-size:10px; font-weight:700;
+  color:var(--muted); text-align:right;
+  background:rgba(255,255,255,.02);
+  border-bottom:1px solid var(--border);
+  white-space:nowrap; text-transform:uppercase; letter-spacing:.4px;
+}
+tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background:rgba(59,130,246,.04); }
+td { padding:10px 14px; font-size:12px; text-align:right; vertical-align:middle; }
+.chart-section { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:20px; margin-bottom:32px; }
+.chart-section h3 { font-size:14px; font-weight:700; margin-bottom:16px; }
+.chart-wrap { position:relative; width:100%; height:220px; }
+.chart-legend { display:flex; gap:16px; margin-bottom:12px; font-size:12px; color:var(--muted); }
+.legend-dot { width:10px; height:10px; border-radius:2px; display:inline-block; margin-left:5px; }
+.info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:32px; }
+.info-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:16px 18px;
+}
+.info-card-title { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; margin-bottom:10px; }
+.info-card p { font-size:12px; color:var(--muted); line-height:1.7; }
+footer {
+  text-align:center; padding:20px 40px;
+  border-top:1px solid var(--border);
+  color:var(--muted); font-size:11px;
+  position:relative; z-index:1;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.fade-up { animation:fadeUp .45s ease forwards; }
+@media(max-width:768px) {
+  header,.page { padding-right:16px; padding-left:16px; }
+  .companies-grid { grid-template-columns:1fr; }
+  .field-grid { grid-template-columns:1fr 1fr; }
+  .field-full { grid-column:span 2; }
+  .thresholds { grid-template-columns:repeat(3,1fr); }
+  .formula-badge { display:none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏢</div>
+    <div>
+      <h1>نطاقات السعودة</h1>
+      <p>حاسبة ديناميكية — نطاقات المطور 2026</p>
+    </div>
+  </div>
+  <div class="formula-badge">حد النطاق = Y1 + Slope × Ln(ن)</div>
+</header>
+
+<div class="page">
+
+  <div class="kpi-grid fade-up">
+    <div class="kpi blue"><div class="kpi-label">إجمالي الموظفين</div><div class="kpi-val" id="gTotal">—</div></div>
+    <div class="kpi green"><div class="kpi-label">إجمالي السعوديين</div><div class="kpi-val" id="gSaudi">—</div></div>
+    <div class="kpi gold"><div class="kpi-label">متوسط التوطين</div><div class="kpi-val" id="gRate">—</div></div>
+    <div class="kpi gold"><div class="kpi-label">بلاتيني ⭐</div><div class="kpi-val" id="gPlat">—</div></div>
+    <div class="kpi green"><div class="kpi-label">أخضر مرتفع</div><div class="kpi-val" id="gHigh">—</div></div>
+    <div class="kpi red"><div class="kpi-label">أحمر 🔴</div><div class="kpi-val" id="gRed">—</div></div>
+  </div>
+
+  <div class="section-title">📊 المنشآت</div>
+  <div class="companies-grid" id="companiesGrid"></div>
+  <button class="add-btn" onclick="addCompany()">+ إضافة منشأة جديدة</button>
+
+  <div class="section-title">📋 ملخص المنشآت</div>
+  <div class="table-wrap">
+    <div class="table-bar">
+      <h3>جدول تفصيلي مع حدود النطاق المحسوبة ديناميكياً</h3>
+      <input class="search-input" placeholder="🔍 بحث بالاسم..." id="searchInput" oninput="filterTable()">
+    </div>
+    <div class="tbl-wrap">
+      <table id="summaryTable">
+        <thead>
+          <tr>
+            <th>المنشأة</th><th>القطاع</th><th>الموظفين</th>
+            <th>سعوديون</th><th>النسبة %</th>
+            <th>حد أ.منخفض</th><th>حد أ.متوسط</th><th>حد أ.مرتفع</th><th>حد بلاتيني</th>
+            <th>النطاق</th>
+          </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h3>📈 مقارنة المنشآت</h3>
+    <div class="chart-legend">
+      <span><span class="legend-dot" style="background:#22c55e"></span>سعوديون</span>
+      <span><span class="legend-dot" style="background:#374151"></span>غير سعوديين</span>
+    </div>
+    <div class="chart-wrap"><canvas id="mainChart"></canvas></div>
+  </div>
+
+  <div class="section-title">ℹ️ دليل النطاقات</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title"><span style="color:#f87171">🔴</span> الأحمر</div>
+      <p>أقل من الحد الأدنى. إيقاف خدمات وزارة الموارد البشرية وعدم إمكانية الاستقدام.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title"><span style="color:var(--low-green)">🟢</span> أخضر منخفض</div>
+      <p>الحد الأدنى المقبول. خدمات محدودة. يُنصح بالتحسين للاستفادة من المزايا.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title"><span style="color:var(--mid-green)">🟢</span> أخضر متوسط</div>
+      <p>مستوى جيد. خدمات أوسع وإمكانية استقدام أيسر.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title"><span style="color:var(--high-green)">🟢</span> أخضر مرتفع</div>
+      <p>مستوى مميز. تسهيلات واسعة في إصدار التأشيرات وخدمات الوزارة.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title"><span style="color:var(--platinum)">⭐</span> بلاتيني</div>
+      <p>أعلى مستوى. تسهيلات كاملة وأولوية في المشتريات الحكومية وتأشيرات غير محدودة.</p>
+    </div>
+    <div class="info-card" style="border-color:rgba(59,130,246,.2)">
+      <div class="info-card-title"><span style="color:var(--accent2)">📐</span> المعادلة الديناميكية</div>
+      <p>حد كل نطاق = <strong style="color:var(--text)">Y1 + Slope × Ln(عدد الموظفين)</strong>. الحدود تتغير مع كل تعديل في أعداد الموظفين.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  حاسبة نطاقات السعودة | نطاقات المطور 2026 — وزارة الموارد البشرية والتنمية الاجتماعية<br>
+  <span style="font-size:10px;margin-top:3px;display:block">مبني على الدليل الإجرائي لبرنامج نطاقات المطور الصادر يناير 2026</span>
+</footer>
+
+<script>
+const SECTORS = {
+  "الإنتاج الزراعي والحيواني وخدماتها وأندية الفروسية": [{s:0.19,y:4.38},{s:0.58,y:5.13},{s:0.58,y:9.38},{s:0.58,y:14.38}],
+  "أنشطة الهيدروكربونات وعملياتها":                    [{s:4.98,y:3.62},{s:6,y:18},{s:6,y:21},{s:6,y:23}],
+  "الصناعات":                                          [{s:1.68,y:12.08},{s:1.87,y:18.87},{s:2.08,y:22.47},{s:2.08,y:28.37}],
+  "مقاولات التشييد والبناء والطاقة":                   [{s:-0.37,y:12.17},{s:-0.37,y:14.17},{s:0,y:17},{s:0,y:22}],
+  "التشغيل والصيانة":                                  [{s:0.14,y:16.12},{s:0.14,y:20.12},{s:0.48,y:24.96},{s:0.76,y:29.09}],
+  "الجملة والتجزئة":                                   [{s:2.47,y:20.25},{s:2.47,y:24.72},{s:2.67,y:28.91},{s:2.84,y:36.91}],
+  "مطاعم مع الخدمة (لا تشمل الوجبات السريعة)":        [{s:1.58,y:12.47},{s:1.67,y:15.98},{s:1.67,y:20.26},{s:1.67,y:25.71}],
+  "مطاعم خدمة سريعة ومحلات الآيس كريم":               [{s:1.58,y:14.08},{s:1.67,y:19.04},{s:1.67,y:23.27},{s:1.67,y:28.26}],
+  "المقاهي ومحلات تقديم المشروبات":                    [{s:1.58,y:15.98},{s:1.67,y:19.49},{s:1.67,y:31.42},{s:1.67,y:34.52}],
+  "التموين والإعاشة":                                  [{s:1.58,y:13.46},{s:1.67,y:16.97},{s:1.67,y:21.25},{s:1.67,y:26.93}],
+  "السلع النسائية وبيع الهواتف وصيانتها":              [{s:0,y:82},{s:0,y:85},{s:0,y:89},{s:0.27,y:93.42}],
+  "النقل البري والتخزين":                              [{s:1.15,y:11.09},{s:1.15,y:15.2},{s:1.5,y:17.82},{s:1.71,y:26.74}],
+  "النقل البحري والجوي":                               [{s:1.45,y:24.57},{s:1.45,y:37.98},{s:1.86,y:47.38},{s:2.67,y:54.29}],
+  "المؤسسات المالية":                                  [{s:2.6,y:50},{s:2.6,y:57},{s:2.6,y:62},{s:2.6,y:65}],
+  "خدمات الأعمال":                                     [{s:1.03,y:30.78},{s:1.03,y:39.62},{s:2.19,y:42.12},{s:2.19,y:52.82}],
+  "الخدمات الاجتماعية":                                [{s:1.83,y:12.82},{s:2.38,y:24.9},{s:3.5,y:31.74},{s:3.5,y:54.52}],
+  "الخدمات الشخصية":                                   [{s:1.46,y:13.07},{s:1.92,y:19.36},{s:4.4,y:23.65},{s:5,y:25.13}],
+  "التعليم العالي":                                    [{s:0,y:34},{s:0,y:48},{s:0.43,y:75.37},{s:0.43,y:82}],
+  "مدارس البنات ورياض الأطفال والحضانات":              [{s:0,y:51},{s:0,y:66},{s:0,y:89.56},{s:0,y:95}],
+  "المدارس الأجنبية":                                  [{s:2.3,y:4.95},{s:2.3,y:14.19},{s:2.3,y:19.99},{s:2.3,y:28.77}],
+  "المختبرات والخدمات الصحية":                         [{s:0.35,y:23.74},{s:0.35,y:28.74},{s:0.35,y:33.24},{s:0.35,y:34.24}],
+  "الإيواء والترفيه والسياحة":                         [{s:2.42,y:22.6},{s:2.42,y:29.02},{s:2.59,y:34.4},{s:2.59,y:40.52}],
+  "السلع الأساسية والمحروقات":                         [{s:0.17,y:8.86},{s:0.56,y:11.22},{s:0.56,y:21.59},{s:1.19,y:26.09}],
+  "مدارس البنين ومجمعات البنين والبنات":               [{s:1.31,y:29.3},{s:1.31,y:39.15},{s:1.31,y:50.27},{s:1.31,y:61}],
+  "حراسات أمنية ومكاتب التوظيف الأهلية":              [{s:0.34,y:74.5},{s:0.34,y:77.5},{s:0.34,y:80.5},{s:0.34,y:84.5}],
+  "حلول الاتصالات":                                    [{s:2.19,y:25.76},{s:2.52,y:34.76},{s:2.91,y:40.02},{s:3.22,y:47.15}],
+  "أنشطة البريد":                                      [{s:0.81,y:17.1},{s:0.81,y:22.1},{s:1.01,y:32.5},{s:1.01,y:42.5}],
+  "البنية التحتية لتقنية المعلومات":                   [{s:3.61,y:15.77},{s:3.61,y:22.64},{s:3.61,y:38},{s:3.61,y:48}],
+  "البنية التحتية للاتصالات":                          [{s:0,y:15},{s:0,y:19},{s:0,y:23},{s:0,y:28}],
+  "التشغيل والصيانة للاتصالات":                        [{s:0,y:15},{s:0.39,y:18.98},{s:0.39,y:23.33},{s:0.39,y:28}],
+  "التشغيل والصيانة لتقنية المعلومات":                 [{s:4.85,y:13.96},{s:4.85,y:22.42},{s:4.85,y:25.42},{s:4.85,y:32.36}],
+  "حلول تقنية المعلومات":                              [{s:2.19,y:24.76},{s:2.34,y:30.54},{s:2.91,y:39.02},{s:3.22,y:46.15}],
+  "تعدين المعادن الفلزية والأحجار الكريمة":            [{s:1.68,y:16},{s:1.87,y:19},{s:2.08,y:28},{s:6,y:23}],
+  "تعدين المعادن غير الفلزية والصناعية":               [{s:1.68,y:16},{s:1.87,y:17},{s:2.08,y:19},{s:6,y:23}],
+  "تعدين مواد البناء":                                 [{s:0,y:7},{s:0,y:10},{s:0,y:13},{s:0,y:23}],
+  "الطاقة والمياه وخدماتها":                           [{s:1.35,y:6.36},{s:2.6,y:7.32},{s:3,y:15.18},{s:3,y:30.93}],
+  "الكيانات المجمعة":                                  [{s:2.23,y:10.99},{s:2.23,y:22.4},{s:2.23,y:33.81},{s:2.23,y:44}],
+};
+
+const NL   = ['أخضر منخفض','أخضر متوسط','أخضر مرتفع','بلاتيني'];
+const NC   = ['#86efac','#4ade80','#22c55e','#e2c97e'];
+const NCLS = ['nb-low','nb-mid','nb-high','nb-platinum'];
+
+function calcThr(sector, total) {
+  const rows = SECTORS[sector];
+  if (!rows || total <= 0) return [0,0,0,0];
+  const lnN = Math.log(total);
+  return rows.map(r => Math.max(0, r.y + r.s * lnN));
+}
+
+function getNI(pct, thr) {
+  if (pct >= thr[3]) return 3;
+  if (pct >= thr[2]) return 2;
+  if (pct >= thr[1]) return 1;
+  if (pct >= thr[0]) return 0;
+  return -1;
+}
+
+let companies = [], cid = 0, chart = null;
+
+function renderCard(id) {
+  const c = companies.find(x => x.id === id);
+  if (!c) return;
+  const saudi    = parseFloat(c.saudi) || 0;
+  const nonSaudi = parseFloat(c.nonSaudi) || 0;
+  const total    = saudi + nonSaudi;
+  const pct      = total > 0 ? (saudi / total) * 100 : 0;
+  const thr      = calcThr(c.sector, total);
+  const ni       = getNI(pct, thr);
+  const color    = ni >= 0 ? NC[ni] : '#ef4444';
+  const label    = ni >= 0 ? NL[ni] : 'أحمر';
+  const cls      = ni >= 0 ? NCLS[ni] : 'nb-red';
+  const maxBar   = Math.max(thr[3] * 1.2, pct + 5, 10);
+  const barW     = Math.min((pct / maxBar) * 100, 100).toFixed(1);
+
+  let upgradeHint = '';
+  if (ni < 3 && total > 0) {
+    const nextThr = thr[ni + 1];
+    const needed  = Math.ceil((nextThr / 100) * total - saudi);
+    if (needed > 0) {
+      upgradeHint = `<div class="upgrade-hint" style="color:${NC[ni+1]};border-color:${NC[ni+1]}44;background:${NC[ni+1]}11">
+        للوصول إلى <strong>${NL[ni+1]}</strong> (${nextThr.toFixed(2)}%) تحتاج <strong>${needed}</strong> سعودي إضافي
+      </div>`;
+    }
+  }
+
+  const thrBoxes = [
+    {label:'أحمر',    color:'#ef4444', val:`0 → ${thr[0].toFixed(1)}%`,                       active: ni===-1},
+    {label:'أ.منخفض', color:NC[0],     val:`${thr[0].toFixed(1)} → ${thr[1].toFixed(1)}%`,    active: ni===0},
+    {label:'أ.متوسط', color:NC[1],     val:`${thr[1].toFixed(1)} → ${thr[2].toFixed(1)}%`,    active: ni===1},
+    {label:'أ.مرتفع', color:NC[2],     val:`${thr[2].toFixed(1)} → ${thr[3].toFixed(1)}%`,    active: ni===2},
+    {label:'بلاتيني', color:NC[3],     val:`${thr[3].toFixed(1)}%+`,                          active: ni===3},
+  ];
+
+  document.getElementById('res_' + id).innerHTML = `
+    <div class="result-box">
+      <div class="res-top">
+        <span class="pct-big" style="color:${color}">${pct.toFixed(2)}%</span>
+        <span class="nitaq-badge ${cls}">${label}</span>
+        <span style="font-size:11px;color:var(--muted)">${saudi} سعودي / ${total} موظف</span>
+      </div>
+      <div class="bar-labels"><span>0%</span><span>${maxBar.toFixed(0)}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${color}"></div></div>
+      <div class="thresholds">
+        ${thrBoxes.map(t => `
+          <div class="thresh ${t.active ? 'active' : ''}"
+               style="${t.active ? `border-color:${t.color};background:${t.color}18` : ''}">
+            <div class="tl" style="color:${t.color}">${t.label}</div>
+            <div class="tv" style="color:${t.color}">${t.val}</div>
+          </div>`).join('')}
+      </div>
+      ${upgradeHint}
+    </div>`;
+
+  updateGlobals();
+  updateChart();
+}
+
+function addCompany(name='', sector='الصناعات', saudi='', nonSaudi='') {
+  const id = ++cid;
+  companies.push({ id, name, sector, saudi, nonSaudi });
+  const opts = Object.keys(SECTORS)
+    .map(s => `<option value="${s}" ${s === sector ? 'selected' : ''}>${s}</option>`)
+    .join('');
+  const div = document.createElement('div');
+  div.className = 'company-card fade-up';
+  div.id = 'card_' + id;
+  div.innerHTML = `
+    <div class="cc-header">
+      <input type="text" placeholder="اسم المنشأة" value="${name}"
+        oninput="updateF(${id},'name',this.value)">
+      <button class="remove-btn" onclick="removeCompany(${id})">حذف</button>
+    </div>
+    <div class="cc-body">
+      <div class="field-grid">
+        <div class="field field-full">
+          <label>النشاط الاقتصادي</label>
+          <select onchange="updateF(${id},'sector',this.value);renderCard(${id})">${opts}</select>
+        </div>
+        <div class="field">
+          <label>السعوديون</label>
+          <input type="number" min="0" step="1" placeholder="0" value="${saudi}"
+            oninput="updateF(${id},'saudi',this.value);renderCard(${id})">
+        </div>
+        <div class="field">
+          <label>غير السعوديين</label>
+          <input type="number" min="0" step="1" placeholder="0" value="${nonSaudi}"
+            oninput="updateF(${id},'nonSaudi',this.value);renderCard(${id})">
+        </div>
+        <div class="field">
+          <label>الإجمالي</label>
+          <input type="number" readonly id="tot_${id}"
+            value="${(parseFloat(saudi)||0)+(parseFloat(nonSaudi)||0)}">
+        </div>
+      </div>
+      <div id="res_${id}"></div>
+    </div>`;
+  document.getElementById('companiesGrid').appendChild(div);
+  renderCard(id);
+}
+
+function removeCompany(id) {
+  companies = companies.filter(x => x.id !== id);
+  document.getElementById('card_' + id)?.remove();
+  updateGlobals();
+  updateChart();
+}
+
+function updateF(id, field, val) {
+  const c = companies.find(x => x.id === id);
+  if (!c) return;
+  c[field] = val;
+  const s = parseFloat(c.saudi) || 0;
+  const n = parseFloat(c.nonSaudi) || 0;
+  const el = document.getElementById('tot_' + id);
+  if (el) el.value = s + n;
+}
+
+function updateGlobals() {
+  let totEmp=0, totSaudi=0, totPlat=0, totHigh=0, totRed=0;
+  companies.forEach(c => {
+    const s=parseFloat(c.saudi)||0, n=parseFloat(c.nonSaudi)||0, tot=s+n;
+    totEmp += tot; totSaudi += s;
+    const pct = tot > 0 ? (s/tot)*100 : 0;
+    const thr = calcThr(c.sector, tot);
+    const ni  = getNI(pct, thr);
+    if (ni===3) totPlat++; else if (ni===2) totHigh++; else if (ni===-1) totRed++;
+  });
+  const avg = totEmp > 0 ? (totSaudi/totEmp)*100 : 0;
+  document.getElementById('gTotal').textContent = totEmp.toLocaleString('ar-SA');
+  document.getElementById('gSaudi').textContent = totSaudi.toLocaleString('ar-SA');
+  document.getElementById('gRate').textContent  = avg.toFixed(1) + '%';
+  document.getElementById('gPlat').textContent  = totPlat;
+  document.getElementById('gHigh').textContent  = totHigh;
+  const rEl = document.getElementById('gRed');
+  rEl.textContent = totRed;
+  rEl.style.color = totRed > 0 ? '#f87171' : 'var(--text)';
+
+  document.getElementById('summaryBody').innerHTML = companies.map(c => {
+    const s=parseFloat(c.saudi)||0, n=parseFloat(c.nonSaudi)||0, tot=s+n;
+    const pct   = tot > 0 ? (s/tot)*100 : 0;
+    const thr   = calcThr(c.sector, tot);
+    const ni    = getNI(pct, thr);
+    const color = ni >= 0 ? NC[ni] : '#ef4444';
+    const label = ni >= 0 ? NL[ni] : 'أحمر';
+    const cls   = ni >= 0 ? NCLS[ni] : 'nb-red';
+    return `<tr>
+      <td style="font-weight:700">${c.name||'منشأة'}</td>
+      <td style="font-size:11px;color:var(--muted);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.sector}</td>
+      <td>${tot.toLocaleString('ar-SA')}</td>
+      <td style="color:var(--high-green)">${s.toLocaleString('ar-SA')}</td>
+      <td style="font-weight:700;color:${color}">${pct.toFixed(1)}%</td>
+      <td style="color:var(--low-green)">${thr[0].toFixed(1)}%</td>
+      <td style="color:var(--mid-green)">${thr[1].toFixed(1)}%</td>
+      <td style="color:var(--high-green)">${thr[2].toFixed(1)}%</td>
+      <td style="color:var(--platinum)">${thr[3].toFixed(1)}%</td>
+      <td><span class="nitaq-badge ${cls}" style="font-size:11px;padding:3px 10px">${label}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function updateChart() {
+  if (chart) { chart.destroy(); chart = null; }
+  if (!companies.length) return;
+  chart = new Chart(document.getElementById('mainChart'), {
+    type: 'bar',
+    data: {
+      labels: companies.map(c => c.name || 'منشأة'),
+      datasets: [
+        { label:'سعوديون',     data: companies.map(c=>parseFloat(c.saudi)||0),    backgroundColor:'#22c55e', borderRadius:5, stack:'s' },
+        { label:'غير سعوديين', data: companies.map(c=>parseFloat(c.nonSaudi)||0), backgroundColor:'#374151', borderRadius:5, stack:'s' },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{
+        x:{ stacked:true, ticks:{color:'#6b7a99',font:{size:11}}, grid:{display:false} },
+        y:{ stacked:true, ticks:{color:'#6b7a99',font:{size:11}}, beginAtZero:true, grid:{color:'rgba(255,255,255,.05)'} }
+      },
+      animation:{ duration:350 }
+    }
+  });
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('#summaryBody tr').forEach(tr => {
+    tr.style.display = tr.cells[0]?.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// البيانات الافتراضية من ملف الإكسل
+addCompany('Factory (CPP)',  'الصناعات',                               '2000',  '2000');
+addCompany('Cleaning',       'مقاولات التشييد والبناء والطاقة',        '20000', '20000');
+addCompany('DFC',            'مطاعم خدمة سريعة ومحلات الآيس كريم',    '62',    '191');
+addCompany('Transportation', 'أنشطة البريد',                          '12',    '41');
+</script>
+</body>
+</html>
