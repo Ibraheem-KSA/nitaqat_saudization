@@ -347,11 +347,41 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
   <p style="margin-top:0.4rem;font-size:0.8rem;opacity:0.5" data-i18n="credit">إعداد إبراهيم</p>
 </div>
 
+
+
+
 <div class="container">
   <div class="grid-2">
 
     <!-- INPUT PANEL -->
     <div>
+
+      <!-- DISMISSIBLE BANNER -->
+      <div id="qiwa-banner" style="background:var(--bg2);border:1px solid rgba(59,130,246,0.25);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1.25rem;position:relative">
+        <button onclick="document.getElementById('qiwa-banner').style.display='none'" style="position:absolute;top:0.6rem;left:0.75rem;background:none;border:none;color:var(--text2);cursor:pointer;font-size:1rem;opacity:0.5;line-height:1">✕</button>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--accent2);margin-bottom:0.75rem" data-i18n="banner_title">💡 كيف تطابق أرقام قوى؟</div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap">
+          <!-- Qiwa mockup -->
+          <div style="flex-shrink:0;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);padding:0.75rem 1rem;min-width:170px">
+            <div style="font-size:0.7rem;color:var(--text2);margin-bottom:0.6rem;text-align:center" data-i18n="banner_qiwa_shows">ما تعرضه قوى فقط</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem">
+              <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:6px;padding:0.5rem;text-align:center">
+                <div style="font-size:1.2rem;font-weight:800;color:var(--green-high)">80</div>
+                <div style="font-size:0.65rem;color:var(--text2)" data-i18n="banner_saudi">سعوديون</div>
+              </div>
+              <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:6px;padding:0.5rem;text-align:center">
+                <div style="font-size:1.2rem;font-weight:800;color:#fca5a5">71</div>
+                <div style="font-size:0.65rem;color:var(--text2)" data-i18n="banner_expat">غير سعوديين</div>
+              </div>
+            </div>
+            <div style="font-size:0.65rem;color:var(--warn);text-align:center" data-i18n="banner_hidden">⚠️ الحالات الخاصة مدمجة هنا</div>
+          </div>
+          <!-- Explanation -->
+          <div style="flex:1;font-size:0.81rem;color:var(--text2);line-height:1.7;min-width:150px" data-i18n="banner_desc">
+            قوى تجمع كل الموظفين في رقمين فقط. لكن داخل هذين الرقمين حالات خاصة لها معاملات مختلفة (قبائل نازحة، خليجيون، ذوو احتياجات...). لمطابقة النتيجة: <strong style="color:var(--text)">افصل كل فئة في خانتها أدناه</strong>.
+          </div>
+        </div>
+      </div>
 
       <!-- ACTIVITY & BASICS -->
       <div class="card" style="margin-bottom:1.25rem">
@@ -379,6 +409,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
           <div>
             <label data-i18n="saudi_full_lbl">سعودي عادي (دوام كامل)</label>
             <input type="number" id="saudi_full" min="0" value="0" placeholder="0">
+            <div style="font-size:0.73rem;color:var(--text2);margin-top:0.25rem" data-i18n="saudi_full_hint">راتب 4,000+ ريال — لا تشمل الحالات الخاصة أدناه</div>
           </div>
           <div>
             <label data-i18n="saudi_part_lbl">سعودي دوام جزئي <small style="color:var(--warn)">(×0.5)</small></label>
@@ -465,6 +496,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
           <div>
             <label data-i18n="expat_normal_lbl">وافد عادي</label>
             <input type="number" id="expat_normal" min="0" value="0" placeholder="0">
+            <div style="font-size:0.73rem;color:var(--text2);margin-top:0.25rem" data-i18n="expat_normal_hint">لا تشمل الفلسطيني/البلوشي أو البرماوي — أدخلهم في خاناتهم</div>
           </div>
           <div>
             <label data-i18n="expat_pales_lbl">فلسطيني/بلوشي <small style="color:var(--green-mid)">(×0.25)</small></label>
@@ -649,6 +681,10 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 
       </div>
 
+      <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:var(--r2);padding:0.85rem 1rem;margin-bottom:0.75rem;font-size:0.82rem;color:var(--text2);line-height:1.7" data-i18n="accuracy_note">
+        <strong style="color:var(--accent2)">⚡ لدقة النتيجة:</strong> قوى تعرض لك رقمين فقط — إجمالي سعوديين وإجمالي غير سعوديين — بدون تفاصيل الحالات الخاصة. لتطابق حاسبتنا مع قوى يجب إدخال كل فئة في خانتها الصحيحة (ذوو احتياجات، مفرج عنهم، دوام جزئي، قبائل نازحة، فلسطيني/بلوشي... إلخ). إدخال الجميع كـ "سعودي عادي" أو "وافد عادي" سيعطي نتيجة مختلفة.
+      </div>
+
       <button class="btn-calc" data-i18n="calc_btn" onclick="calculate()">🔢 احسب النطاق والتنبيهات</button>
     </div>
 
@@ -829,6 +865,15 @@ const i18n = {
     no_warn: '✅ لا توجد قرارات توطين مهني مسجلة لمنشأتك',
     alert_select: 'اختر النشاط الاقتصادي أولاً — ابحث واختر من القائمة',
     alert_empty: 'أدخل عدد الموظفين أولاً',
+    banner_title: 'كيف تطابق أرقام قوى؟',
+    banner_desc: 'قوى تعرض فقط رقمين: <strong style="color:var(--text)">عدد السعوديين</strong> و<strong style="color:var(--text)">عدد غير السعوديين</strong> — لكن هذه الأرقام تشمل حالات خاصة (قبائل نازحة، خليجيون، ذوو احتياجات...) محتسبة بمعاملات مختلفة. لمطابقة النتيجة بدقة: <strong style="color:var(--accent2)">افصل كل فئة في خانتها المخصصة</strong> بدلاً من جمعهم في "سعودي عادي" أو "وافد عادي".',
+    banner_qiwa_shows: 'ما تعرضه قوى',
+    banner_saudi: 'سعوديون',
+    banner_expat: 'غير سعوديين',
+    banner_hidden: '⚠️ الحالات الخاصة مدمجة داخل هذه الأرقام',
+    saudi_full_hint: 'راتب 4,000+ ريال — لا تشمل الحالات الخاصة أدناه',
+    expat_normal_hint: 'لا تشمل الفلسطيني/البلوشي أو البرماوي — أدخلهم في خاناتهم',
+    accuracy_note: '<strong style="color:var(--accent2)">⚡ لدقة النتيجة:</strong> قوى تعرض لك رقمين فقط — إجمالي سعوديين وإجمالي غير سعوديين — بدون تفاصيل الحالات الخاصة. لتطابق حاسبتنا مع قوى يجب إدخال كل فئة في خانتها الصحيحة (ذوو احتياجات، مفرج عنهم، دوام جزئي، قبائل نازحة، فلسطيني/بلوشي... إلخ). إدخال الجميع كـ "سعودي عادي" أو "وافد عادي" سيعطي نتيجة مختلفة.',
     platinum: '⭐ بلاتيني', green_high: '🟢 أخضر مرتفع', green_mid: '🟡 أخضر متوسط',
     green_low: '🟠 أخضر منخفض', red_level: '🔴 أحمر',
     top_level: '🎉 أنت في أعلى نطاق — حافظ على مستواك!',
@@ -926,6 +971,17 @@ const i18n = {
     no_warn: '✅ No professional localization decisions registered for your establishment',
     alert_select: 'Please select the economic activity first — search and choose from the list',
     alert_empty: 'Please enter the number of employees first',
+    info_banner: '⚠️ For accurate results: Qiwa only shows two numbers — total Saudis and total non-Saudis — without special case details. To match Qiwa\'s result, <strong style="color:var(--text)">each employee must be entered in their correct category</strong> (special needs, ex-convicts, part-time, displaced tribes, Palestinian/Baluchi... etc). Entering everyone as "regular Saudi" or "regular expatriate" will give a different result.',
+    info_banner_ar: '⚠️ لدقة النتيجة: قوى تعرض لك <strong style="color:var(--text)">رقمين فقط</strong> — إجمالي سعوديين وإجمالي غير سعوديين — بدون تفاصيل الحالات الخاصة. لتطابق حاسبتنا مع قوى <strong style="color:var(--text)">يجب إدخال كل فئة في خانتها الصحيحة</strong> (ذوو احتياجات، مفرج عنهم، دوام جزئي، قبائل نازحة، فلسطيني/بلوشي... إلخ). إدخال الجميع كـ "سعودي عادي" أو "وافد عادي" سيعطي نتيجة مختلفة.',
+    banner_title: 'How to match Qiwa\'s numbers?',
+    banner_desc: 'Qiwa shows only two numbers: <strong style="color:var(--text)">Saudi count</strong> and <strong style="color:var(--text)">non-Saudi count</strong> — but these include special cases (displaced tribes, GCC nationals, special needs...) counted at different weights. For accurate results: <strong style="color:var(--accent2)">enter each category in its dedicated field</strong> instead of grouping them in "regular Saudi" or "regular expat".',
+    banner_qiwa_shows: 'What Qiwa shows',
+    banner_saudi: 'Saudis',
+    banner_expat: 'Non-Saudis',
+    banner_hidden: '⚠️ Special cases are merged inside these numbers',
+    saudi_full_hint: 'Salary 4,000+ SAR — excludes special categories below',
+    expat_normal_hint: 'Excludes Palestinian/Baluchi or Burmese — enter them in their fields',
+    accuracy_note: '<strong style="color:var(--accent2)">⚡ For accurate results:</strong> Qiwa shows only two numbers — total Saudis and total non-Saudis — without special case details. To match Qiwa\'s numbers, enter each category in its correct field (special needs, ex-convicts, part-time, displaced tribes, Palestinian/Baluchi... etc). Entering everyone as "regular Saudi" or "regular expat" will give a different result.',
     platinum: '⭐ Platinum', green_high: '🟢 High Green', green_mid: '🟡 Mid Green',
     green_low: '🟠 Low Green', red_level: '🔴 Red',
     top_level: '🎉 You are at the highest level — maintain your status!',
@@ -947,6 +1003,12 @@ function toggleLang() {
   document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
   document.documentElement.setAttribute('lang', currentLang);
   document.getElementById('lang-btn').textContent = isAr ? 'EN' : 'عربي';
+
+  // Update info banner
+  const banner = document.getElementById('info-banner');
+  if (banner) {
+    banner.innerHTML = isAr ? i18n.ar.info_banner_ar : i18n.en.info_banner;
+  }
 
   // Update all data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(el => {
