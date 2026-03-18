@@ -337,9 +337,14 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 <body>
 
 <div class="header">
-  <h1>حاسبة نطاقات المطور الشاملة بواسطة مورال</h1>
-  <p>احسب نطاقك وتنبيهات التوطين المهني — كل شيء في مكان واحد</p>
-  <p style="margin-top:0.4rem;font-size:0.8rem;opacity:0.5">إعداد إبراهيم</p>
+  <div style="position:absolute;top:1rem;left:1rem">
+    <button onclick="toggleLang()" id="lang-btn" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:20px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.85rem;padding:0.35rem 1rem;cursor:pointer;transition:background 0.2s;font-weight:600">
+      EN
+    </button>
+  </div>
+  <h1 data-i18n="title">حاسبة نطاقات المطور الشاملة بواسطة مورال</h1>
+  <p data-i18n="subtitle">احسب نطاقك وتنبيهات التوطين المهني — كل شيء في مكان واحد</p>
+  <p style="margin-top:0.4rem;font-size:0.8rem;opacity:0.5" data-i18n="credit">إعداد إبراهيم</p>
 </div>
 
 <div class="container">
@@ -352,13 +357,13 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
       <div class="card" style="margin-bottom:1.25rem">
         <div class="card-title">
           <div class="icon icon-blue">🏢</div>
-          معلومات المنشأة
+          <span data-i18n="est_info">معلومات المنشأة</span>
         </div>
 
         <div class="form-row" style="position:relative">
-          <label>النشاط الاقتصادي الرئيسي (مسجل في قوى)</label>
+          <label data-i18n="activity_label">النشاط الاقتصادي الرئيسي (مسجل في قوى)</label>
           <div style="position:relative">
-            <input type="text" id="activity-search" placeholder="اكتب للبحث أو اضغط ▼ لعرض الكل..." autocomplete="off"
+            <input type="text" id="activity-search" data-i18n-placeholder="activity_placeholder" placeholder="اكتب للبحث أو اضغط ▼ لعرض الكل..." autocomplete="off"
               oninput="filterActivities()" onfocus="showDropdown()" onblur="setTimeout(hideDropdown,250)"
               style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.9rem;padding:0.6rem 2.5rem 0.6rem 0.85rem;outline:none;transition:border-color 0.2s;">
             <span onclick="toggleAllActivities()" style="position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2);font-size:0.75rem;user-select:none;padding:0.2rem">▼</span>
@@ -368,116 +373,116 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
           <div id="activity-selected" style="display:none;margin-top:0.4rem;font-size:0.8rem;color:var(--accent2)"></div>
         </div>
 
-        <div class="section-divider">الموظفون السعوديون (موثقة عقودهم في قوى)</div>
+        <div class="section-divider" data-i18n="saudi_div">الموظفون السعوديون (موثقة عقودهم في قوى)</div>
 
         <div class="form-grid">
           <div>
-            <label>سعودي عادي (دوام كامل)</label>
+            <label data-i18n="saudi_full_lbl">سعودي عادي (دوام كامل)</label>
             <input type="number" id="saudi_full" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>سعودي دوام جزئي <small style="color:var(--warn)">(×0.5)</small></label>
+            <label data-i18n="saudi_part_lbl">سعودي دوام جزئي <small style="color:var(--warn)">(×0.5)</small></label>
             <input type="number" id="saudi_part" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>سعودي طالب <small style="color:var(--warn)">(×0.5، حد 10%)</small></label>
+            <label data-i18n="saudi_student_lbl">سعودي طالب <small style="color:var(--warn)">(×0.5، حد 10%)</small></label>
             <input type="number" id="saudi_student" min="0" value="0" placeholder="0">
           </div>
           <div style="grid-column:1/-1">
-            <label>سعودي ذوو احتياجات خاصة</label>
+            <label data-i18n="saudi_disabled_lbl">سعودي ذوو احتياجات خاصة</label>
             <div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.3rem;flex-wrap:wrap">
               <input type="number" id="saudi_disabled" min="0" value="0" placeholder="0" style="width:100px;flex-shrink:0">
               <label class="toggle-row" style="margin:0;flex:1;min-width:200px">
                 <input type="checkbox" id="has_muwaa'ama" onchange="updateDisabledNote()">
-                <span style="font-size:0.83rem">للمنشأة شهادة مواءمة <small style="color:var(--text2)">(مطلوبة إذا +50 موظف)</small></span>
+                <span style="font-size:0.83rem" data-i18n="cert_lbl">للمنشأة شهادة مواءمة <small style="color:var(--text2)">(مطلوبة إذا +50 موظف)</small></span>
               </label>
             </div>
-            <div id="disabled-note" style="font-size:0.78rem;color:var(--text2);margin-top:0.3rem;font-style:italic">
+            <div id="disabled-note" style="font-size:0.78rem;color:var(--text2);margin-top:0.3rem;font-style:italic" data-i18n="disabled_note">
               أقل من 50 موظف → ×4 تلقائياً | أكثر من 50 بدون شهادة → ×1
             </div>
-            <div style="font-size:0.78rem;color:var(--green-high);margin-top:0.25rem">
+            <div style="font-size:0.78rem;color:var(--green-high);margin-top:0.25rem" data-i18n="cap10">
               ✓ حد أقصى 10% من السعوديين
             </div>
           </div>
           <div>
-            <label>سعودي راتبه بين 3,000 و4,000 ريال <small style="color:var(--warn)">(×0.5)</small></label>
+            <label data-i18n="saudi_lowsal_lbl">سعودي راتبه بين 3,000 و4,000 ريال <small style="color:var(--warn)">(×0.5)</small></label>
             <input type="number" id="saudi_lowsalary" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>سعودي راتبه أقل من 3,000 ريال <small style="color:var(--red)">(×0 لا يُحسب)</small></label>
+            <label data-i18n="saudi_zerosal_lbl">سعودي راتبه أقل من 3,000 ريال <small style="color:var(--red)">(×0 لا يُحسب)</small></label>
             <input type="number" id="saudi_zerosalary" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>سعودي ذوو سوابق ومفرج عنهم <small style="color:var(--green-high)">(×2، حد 10%)</small></label>
+            <label data-i18n="saudi_excon_lbl">سعودي ذوو سوابق ومفرج عنهم <small style="color:var(--green-high)">(×2، حد 10%)</small></label>
             <input type="number" id="saudi_excon" min="0" value="0" placeholder="0">
-            <div style="font-size:0.78rem;color:var(--green-high);margin-top:0.25rem">
+            <div style="font-size:0.78rem;color:var(--green-high);margin-top:0.25rem" data-i18n="cap10">
               ✓ حد أقصى 10% من السعوديين
             </div>
           </div>
         </div>
 
-        <div class="section-divider">فئات محتسبة كسعودي واحد ×1</div>
-        <p style="font-size:0.78rem;color:var(--text2);margin-bottom:0.75rem">هذه الفئات تُحسب مثل السعودي العادي تماماً في نسبة التوطين</p>
+        <div class="section-divider" data-i18n="one_x_div">فئات محتسبة كسعودي واحد ×1</div>
+        <p style="font-size:0.78rem;color:var(--text2);margin-bottom:0.75rem" data-i18n="one_x_desc">هذه الفئات تُحسب مثل السعودي العادي تماماً في نسبة التوطين</p>
 
         <div class="form-grid">
           <div>
-            <label>سعودي موظف عن بُعد</label>
+            <label data-i18n="saudi_remote_lbl">سعودي موظف عن بُعد</label>
             <input type="number" id="saudi_remote" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>ابن/ابنة مواطنة</label>
+            <label data-i18n="saudi_son_lbl">ابن/ابنة مواطنة</label>
             <input type="number" id="saudi_son" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>أم/أرملة مواطن</label>
+            <label data-i18n="saudi_widow_lbl">أم/أرملة مواطن</label>
             <input type="number" id="saudi_widow" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>موظفون من القبائل النازحة</label>
+            <label data-i18n="saudi_tribe_lbl">موظفون من القبائل النازحة</label>
             <input type="number" id="saudi_tribe" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>مواطنو دول الخليج + رياضيون خليجيون</label>
+            <label data-i18n="saudi_gulf_lbl">مواطنو دول الخليج + رياضيون خليجيون</label>
             <input type="number" id="saudi_gulf" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>المالك (سعودي أو غير سعودي)</label>
+            <label data-i18n="saudi_owner_lbl">المالك (سعودي أو غير سعودي)</label>
             <input type="number" id="saudi_owner" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>موظف سعودي مُعار</label>
+            <label data-i18n="saudi_seconded_lbl">موظف سعودي مُعار</label>
             <input type="number" id="saudi_seconded" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>عمل مرن <small style="color:var(--warn)">(×⅓، بشرط 168 ساعة/شهر)</small></label>
+            <label data-i18n="saudi_flex_lbl">عمل مرن <small style="color:var(--warn)">(×⅓، بشرط 168 ساعة/شهر)</small></label>
             <input type="number" id="saudi_flexible" min="0" value="0" placeholder="0">
           </div>
         </div>
 
-        <div class="section-divider">الموظفون غير السعوديين</div>
+        <div class="section-divider" data-i18n="expat_div">الموظفون غير السعوديين</div>
 
         <div class="form-grid">
           <div>
-            <label>وافد عادي</label>
+            <label data-i18n="expat_normal_lbl">وافد عادي</label>
             <input type="number" id="expat_normal" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>فلسطيني/بلوشي <small style="color:var(--green-mid)">(×0.25)</small></label>
-            <input type="number" id="expat_pales" min="0" value="0" placeholder="0" title="بشرط لا يتجاوز 50% من إجمالي الموظفين">
+            <label data-i18n="expat_pales_lbl">فلسطيني/بلوشي <small style="color:var(--green-mid)">(×0.25)</small></label>
+            <input type="number" id="expat_pales" min="0" value="0" placeholder="0">
           </div>
           <div>
-            <label>برماوي خارج مكة/المدينة <small style="color:var(--green-mid)">(لا يحسب)</small></label>
+            <label data-i18n="expat_burma_lbl">برماوي خارج مكة/المدينة <small style="color:var(--green-mid)">(لا يحسب)</small></label>
             <input type="number" id="expat_burma" min="0" value="0" placeholder="0">
           </div>
         </div>
 
-        <p class="note">* زوج/زوجة الوافد لا يحسبون في أي طرف | السعودي أقل من 3,000 ريال يدخل في العدد الكلي لكن لا يُحسب في نسبة التوطين</p>
+        <p class="note" data-i18n="spouse_note">* زوج/زوجة الوافد لا يحسبون في أي طرف | السعودي أقل من 3,000 ريال يدخل في العدد الكلي لكن لا يُحسب في نسبة التوطين</p>
 
         <!-- SMALL ENTITY -->
         <div style="margin-top:1rem">
           <div class="toggle-row">
             <input type="checkbox" id="small_entity">
-            <span>كيان صغير فئة (أ) — 5 موظفين أو أقل</span>
+            <span data-i18n="small_entity_lbl">كيان صغير فئة (أ) — 5 موظفين أو أقل</span>
           </div>
         </div>
       </div>
@@ -486,165 +491,165 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
       <div class="card" style="margin-bottom:1.25rem">
         <div class="card-title">
           <div class="icon icon-purple">⚠️</div>
-          المهن الخاضعة لقرارات توطين مستقلة
+          <span data-i18n="prof_title">المهن الخاضعة لقرارات توطين مستقلة</span>
         </div>
-        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem">هذه القرارات تطبق بغض النظر عن نطاقك — أدخل أعداد كل مهنة إن وجدت</p>
+        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem" data-i18n="prof_desc">هذه القرارات تطبق بغض النظر عن نطاقك — أدخل أعداد كل مهنة إن وجدت</p>
 
         <!-- Accounting — open by default -->
         <div class="collapsible-header open" onclick="toggleSection('acc')">
-          <span>🧾 محاسبون</span>
+          <span data-i18n="acc_title">🧾 محاسبون</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body" id="acc">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>محاسبين سعوديين (معتمدين، راتب 6000+)</label>
+              <label data-i18n="acc_saudi_lbl">محاسبين سعوديين (معتمدين، راتب 6000+)</label>
               <input type="number" id="acc_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>محاسبين غير سعوديين</label>
+              <label data-i18n="acc_expat_lbl">محاسبين غير سعوديين</label>
               <input type="number" id="acc_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 40% حالياً (أكتوبر 2025) — ترتفع تدريجياً لـ 70% بحلول 2029</p>
+          <p class="note" data-i18n="acc_note">* النسبة المطلوبة: 40% حالياً (أكتوبر 2025) — ترتفع تدريجياً لـ 70% بحلول 2029</p>
         </div>
 
         <!-- Engineering -->
         <div class="collapsible-header" onclick="toggleSection('eng')" style="margin-top:0.75rem">
-          <span>⚙️ مهندسون</span>
+          <span data-i18n="eng_title">⚙️ مهندسون</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="eng">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>مهندسين سعوديين (معتمدين، راتب 8000+)</label>
+              <label data-i18n="eng_saudi_lbl">مهندسين سعوديين (معتمدين، راتب 8000+)</label>
               <input type="number" id="eng_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>مهندسين غير سعوديين</label>
+              <label data-i18n="eng_expat_lbl">مهندسين غير سعوديين</label>
               <input type="number" id="eng_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 30% — من 5 مهندسين فأكثر — تطبيق يونيو 2026</p>
+          <p class="note" data-i18n="eng_note">* النسبة المطلوبة: 30% — من 5 مهندسين فأكثر — تطبيق يونيو 2026</p>
         </div>
 
         <!-- Sports -->
         <div class="collapsible-header" onclick="toggleSection('sport')" style="margin-top:0.75rem">
-          <span>🏋️ مدربون رياضيون (مراكز/صالات رياضية)</span>
+          <span data-i18n="sport_title">🏋️ مدربون رياضيون (مراكز/صالات رياضية)</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="sport">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>مدربين سعوديين</label>
+              <label data-i18n="sport_saudi_lbl">مدربين سعوديين</label>
               <input type="number" id="sport_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>مدربين غير سعوديين</label>
+              <label data-i18n="sport_expat_lbl">مدربين غير سعوديين</label>
               <input type="number" id="sport_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 15% — من 4 مدربين فأكثر — تطبيق نوفمبر 2026</p>
+          <p class="note" data-i18n="sport_note">* النسبة المطلوبة: 15% — من 4 مدربين فأكثر — تطبيق نوفمبر 2026</p>
         </div>
 
         <!-- Hospitality -->
         <div class="collapsible-header" onclick="toggleSection('hotel')" style="margin-top:0.75rem">
-          <span>🏨 موظفو الاستقبال (قطاع سياحي/فندقي)</span>
+          <span data-i18n="hotel_title">🏨 موظفو الاستقبال (قطاع سياحي/فندقي)</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="hotel">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>موظفي استقبال سعوديين</label>
+              <label data-i18n="hotel_saudi_lbl">موظفي استقبال سعوديين</label>
               <input type="number" id="hotel_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>موظفي استقبال غير سعوديين</label>
+              <label data-i18n="hotel_expat_lbl">موظفي استقبال غير سعوديين</label>
               <input type="number" id="hotel_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 100% (مأمور سنترال، موظف استقبال فندق) — تطبيق أبريل 2026</p>
+          <p class="note" data-i18n="hotel_note">* النسبة المطلوبة: 100% (مأمور سنترال، موظف استقبال فندق) — تطبيق أبريل 2026</p>
         </div>
 
         <!-- Retail outlets -->
         <div class="collapsible-header" onclick="toggleSection('retail')" style="margin-top:0.75rem">
-          <span>🛒 منافذ بيع الجملة والتجزئة</span>
+          <span data-i18n="retail_title">🛒 منافذ بيع الجملة والتجزئة</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="retail">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>موظفين سعوديين بالمنفذ</label>
+              <label data-i18n="retail_saudi_lbl">موظفين سعوديين بالمنفذ</label>
               <input type="number" id="retail_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>موظفين غير سعوديين بالمنفذ</label>
+              <label data-i18n="retail_expat_lbl">موظفين غير سعوديين بالمنفذ</label>
               <input type="number" id="retail_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 70% لكل منفذ به 4 موظفين فأكثر — محسوبة على المنفذ وليس المنشأة</p>
+          <p class="note" data-i18n="retail_note">* النسبة المطلوبة: 70% لكل منفذ به 4 موظفين فأكثر — محسوبة على المنفذ وليس المنشأة</p>
         </div>
 
         <!-- Housing supervisor -->
         <div class="collapsible-header" onclick="toggleSection('housing')" style="margin-top:0.75rem">
-          <span>🏗️ مشرفو المسكن (مجمعات 20 مستفيد فأكثر)</span>
+          <span data-i18n="housing_title">🏗️ مشرفو المسكن (مجمعات 20 مستفيد فأكثر)</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="housing">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>مشرفو مسكن سعوديين (راتب 5000+)</label>
+              <label data-i18n="housing_saudi_lbl">مشرفو مسكن سعوديين (راتب 5000+)</label>
               <input type="number" id="housing_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>مشرفو مسكن غير سعوديين</label>
+              <label data-i18n="housing_expat_lbl">مشرفو مسكن غير سعوديين</label>
               <input type="number" id="housing_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 100% — تطبيق فبراير 2026</p>
+          <p class="note" data-i18n="housing_note">* النسبة المطلوبة: 100% — تطبيق فبراير 2026</p>
         </div>
 
         <!-- Relaxation centers admin -->
         <div class="collapsible-header" onclick="toggleSection('relax')" style="margin-top:0.75rem">
-          <span>💆 مراكز الاسترخاء والعناية الشخصية (مهن إدارية)</span>
+          <span data-i18n="relax_title">💆 مراكز الاسترخاء والعناية الشخصية (مهن إدارية)</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="relax">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>موظفين إداريين/مساندة سعوديين</label>
+              <label data-i18n="relax_saudi_lbl">موظفين إداريين/مساندة سعوديين</label>
               <input type="number" id="relax_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>موظفين إداريين/مساندة غير سعوديين</label>
+              <label data-i18n="relax_expat_lbl">موظفين إداريين/مساندة غير سعوديين</label>
               <input type="number" id="relax_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 100% على المهن الإدارية والمساندة — تطبيق مايو 2026</p>
+          <p class="note" data-i18n="relax_note">* النسبة المطلوبة: 100% على المهن الإدارية والمساندة — تطبيق مايو 2026</p>
         </div>
 
         <!-- Schools -->
         <div class="collapsible-header" onclick="toggleSection('school')" style="margin-top:0.75rem">
-          <span>📚 مدارس التعليم الأهلي (منهج وطني)</span>
+          <span data-i18n="school_title">📚 مدارس التعليم الأهلي (منهج وطني)</span>
           <span class="arrow">▼</span>
         </div>
         <div class="collapsible-body closed" id="school">
           <div class="form-grid" style="margin-bottom:0.5rem">
             <div>
-              <label>معلمي الهوية الوطنية سعوديين</label>
+              <label data-i18n="school_saudi_lbl">معلمي الهوية الوطنية سعوديين</label>
               <input type="number" id="school_saudi" min="0" value="0" placeholder="0">
             </div>
             <div>
-              <label>معلمي الهوية الوطنية غير سعوديين</label>
+              <label data-i18n="school_expat_lbl">معلمي الهوية الوطنية غير سعوديين</label>
               <input type="number" id="school_expat" min="0" value="0" placeholder="0">
             </div>
           </div>
-          <p class="note">* النسبة المطلوبة: 50% على معلمي الدين والعربي والاجتماعيات — لا يسري على المناهج الدولية</p>
+          <p class="note" data-i18n="school_note">* النسبة المطلوبة: 50% على معلمي الدين والعربي والاجتماعيات — لا يسري على المناهج الدولية</p>
         </div>
 
       </div>
 
-      <button class="btn-calc" onclick="calculate()">🔢 احسب النطاق والتنبيهات</button>
+      <button class="btn-calc" data-i18n="calc_btn" onclick="calculate()">🔢 احسب النطاق والتنبيهات</button>
     </div>
 
     <!-- RESULTS PANEL -->
@@ -654,56 +659,56 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
       <div class="card" style="margin-bottom:1.25rem">
         <div class="card-title">
           <div class="icon icon-green">📊</div>
-          نتيجة نطاقات المطور
+          <span data-i18n="result_title">نتيجة نطاقات المطور</span>
         </div>
 
         <div id="nitaqat-badge" class="nitaqat-result badge-red">
-          <div class="badge-label">نطاق المنشأة الحالي</div>
+          <div class="badge-label" data-i18n="badge_label">نطاق المنشأة الحالي</div>
           <div class="badge-name">--</div>
-          <div class="badge-pct">نسبة السعودة: --</div>
+          <div class="badge-pct" data-i18n="badge_pct_prefix">نسبة السعودة: --</div>
         </div>
 
         <div class="stats-row">
           <div class="stat-card">
             <div class="stat-val" id="stat-total">--</div>
-            <div class="stat-lbl">إجمالي العمالة</div>
+            <div class="stat-lbl" data-i18n="stat_total_lbl">إجمالي العمالة</div>
           </div>
           <div class="stat-card">
             <div class="stat-val" id="stat-saudi">--</div>
-            <div class="stat-lbl">السعوديون المحتسبون</div>
+            <div class="stat-lbl" data-i18n="stat_saudi_lbl">السعوديون المحتسبون</div>
           </div>
           <div class="stat-card">
             <div class="stat-val" id="stat-pct" style="color:var(--accent2)">--</div>
-            <div class="stat-lbl">نسبة التوطين</div>
+            <div class="stat-lbl" data-i18n="stat_pct_lbl">نسبة التوطين</div>
           </div>
         </div>
 
         <div class="thresholds-grid">
           <div class="thresh-card t-red">
-            <div class="thresh-label">أحمر ↔ أخضر منخفض</div>
+            <div class="thresh-label" data-i18n="thresh_red">أحمر ↔ أخضر منخفض</div>
             <div class="thresh-val" id="thresh-low">--</div>
-            <div class="thresh-pct">الحد الأدنى</div>
+            <div class="thresh-pct" data-i18n="thresh_min">الحد الأدنى</div>
           </div>
           <div class="thresh-card t-low">
-            <div class="thresh-label">أخضر متوسط</div>
+            <div class="thresh-label" data-i18n="thresh_mid_lbl">أخضر متوسط</div>
             <div class="thresh-val" id="thresh-mid">--</div>
-            <div class="thresh-pct">الحد الأدنى</div>
+            <div class="thresh-pct" data-i18n="thresh_min">الحد الأدنى</div>
           </div>
           <div class="thresh-card t-high">
-            <div class="thresh-label">أخضر مرتفع</div>
+            <div class="thresh-label" data-i18n="thresh_high_lbl">أخضر مرتفع</div>
             <div class="thresh-val" id="thresh-high">--</div>
-            <div class="thresh-pct">الحد الأدنى</div>
+            <div class="thresh-pct" data-i18n="thresh_min">الحد الأدنى</div>
           </div>
           <div class="thresh-card t-platinum">
-            <div class="thresh-label">بلاتيني</div>
+            <div class="thresh-label" data-i18n="thresh_plat_lbl">بلاتيني</div>
             <div class="thresh-val" id="thresh-plat">--</div>
-            <div class="thresh-pct">الحد الأدنى</div>
+            <div class="thresh-pct" data-i18n="thresh_min">الحد الأدنى</div>
           </div>
         </div>
 
         <div class="progress-wrap">
           <div class="progress-header">
-            <span style="font-size:0.82rem;color:var(--text2)">النسبة الحالية</span>
+            <span style="font-size:0.82rem;color:var(--text2)" data-i18n="current_rate">النسبة الحالية</span>
             <span style="font-size:0.82rem;color:var(--text2)" id="prog-label">0%</span>
           </div>
           <div class="progress-track">
@@ -721,11 +726,11 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
       <div class="card">
         <div class="card-title">
           <div class="icon icon-amber">⚠️</div>
-          تنبيهات التوطين المهني المستقل
+          <span data-i18n="warn_title">تنبيهات التوطين المهني المستقل</span>
         </div>
-        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem">هذه القرارات تطبق بغض النظر عن نطاق المنشأة</p>
+        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem" data-i18n="warn_desc">هذه القرارات تطبق بغض النظر عن نطاق المنشأة</p>
         <div id="warnings-container">
-          <div style="text-align:center;color:var(--text2);padding:2rem;font-size:0.9rem">أدخل البيانات واضغط احسب لرؤية التنبيهات</div>
+          <div style="text-align:center;color:var(--text2);padding:2rem;font-size:0.9rem" data-i18n="warn_placeholder">أدخل البيانات واضغط احسب لرؤية التنبيهات</div>
         </div>
       </div>
 
@@ -734,6 +739,241 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 </div>
 
 <script>
+// =================== i18n ===================
+let currentLang = 'ar';
+
+const i18n = {
+  ar: {
+    title: 'حاسبة نطاقات المطور الشاملة بواسطة مورال',
+    subtitle: 'احسب نطاقك وتنبيهات التوطين المهني — كل شيء في مكان واحد',
+    credit: 'إعداد إبراهيم',
+    est_info: 'معلومات المنشأة',
+    activity_label: 'النشاط الاقتصادي الرئيسي (مسجل في قوى)',
+    activity_placeholder: 'اكتب للبحث أو اضغط ▼ لعرض الكل...',
+    saudi_div: 'الموظفون السعوديون (موثقة عقودهم في قوى)',
+    saudi_full_lbl: 'سعودي عادي (دوام كامل)',
+    saudi_part_lbl: 'سعودي دوام جزئي <small style="color:var(--warn)">(×0.5)</small>',
+    saudi_student_lbl: 'سعودي طالب <small style="color:var(--warn)">(×0.5، حد 10%)</small>',
+    saudi_disabled_lbl: 'سعودي ذوو احتياجات خاصة',
+    cert_lbl: 'للمنشأة شهادة مواءمة <small style="color:var(--text2)">(مطلوبة إذا +50 موظف)</small>',
+    disabled_note: 'أقل من 50 موظف → ×4 تلقائياً | أكثر من 50 بدون شهادة → ×1',
+    cap10: '✓ حد أقصى 10% من السعوديين',
+    saudi_lowsal_lbl: 'سعودي راتبه بين 3,000 و4,000 ريال <small style="color:var(--warn)">(×0.5)</small>',
+    saudi_zerosal_lbl: 'سعودي راتبه أقل من 3,000 ريال <small style="color:var(--red)">(×0 لا يُحسب)</small>',
+    saudi_excon_lbl: 'سعودي ذوو سوابق ومفرج عنهم <small style="color:var(--green-high)">(×2، حد 10%)</small>',
+    one_x_div: 'فئات محتسبة كسعودي واحد ×1',
+    one_x_desc: 'هذه الفئات تُحسب مثل السعودي العادي تماماً في نسبة التوطين',
+    saudi_remote_lbl: 'سعودي موظف عن بُعد',
+    saudi_son_lbl: 'ابن/ابنة مواطنة',
+    saudi_widow_lbl: 'أم/أرملة مواطن',
+    saudi_tribe_lbl: 'موظفون من القبائل النازحة',
+    saudi_gulf_lbl: 'مواطنو دول الخليج + رياضيون خليجيون',
+    saudi_owner_lbl: 'المالك (سعودي أو غير سعودي)',
+    saudi_seconded_lbl: 'موظف سعودي مُعار',
+    saudi_flex_lbl: 'عمل مرن <small style="color:var(--warn)">(×⅓، بشرط 168 ساعة/شهر)</small>',
+    expat_div: 'الموظفون غير السعوديين',
+    expat_normal_lbl: 'وافد عادي',
+    expat_pales_lbl: 'فلسطيني/بلوشي <small style="color:var(--green-mid)">(×0.25)</small>',
+    expat_burma_lbl: 'برماوي خارج مكة/المدينة <small style="color:var(--green-mid)">(لا يحسب)</small>',
+    spouse_note: '* زوج/زوجة الوافد لا يحسبون في أي طرف | السعودي أقل من 3,000 ريال يدخل في العدد الكلي لكن لا يُحسب في نسبة التوطين',
+    small_entity_lbl: 'كيان صغير فئة (أ) — 5 موظفين أو أقل',
+    prof_title: 'المهن الخاضعة لقرارات توطين مستقلة',
+    prof_desc: 'هذه القرارات تطبق بغض النظر عن نطاقك — أدخل أعداد كل مهنة إن وجدت',
+    acc_title: '🧾 محاسبون',
+    acc_saudi_lbl: 'محاسبين سعوديين (معتمدين، راتب 6000+)',
+    acc_expat_lbl: 'محاسبين غير سعوديين',
+    acc_note: '* النسبة المطلوبة: 40% حالياً (أكتوبر 2025) — ترتفع تدريجياً لـ 70% بحلول 2029',
+    eng_title: '⚙️ مهندسون',
+    eng_saudi_lbl: 'مهندسين سعوديين (معتمدين، راتب 8000+)',
+    eng_expat_lbl: 'مهندسين غير سعوديين',
+    eng_note: '* النسبة المطلوبة: 30% — من 5 مهندسين فأكثر — تطبيق يونيو 2026',
+    sport_title: '🏋️ مدربون رياضيون (مراكز/صالات رياضية)',
+    sport_saudi_lbl: 'مدربين سعوديين',
+    sport_expat_lbl: 'مدربين غير سعوديين',
+    sport_note: '* النسبة المطلوبة: 15% — من 4 مدربين فأكثر — تطبيق نوفمبر 2026',
+    hotel_title: '🏨 موظفو الاستقبال (قطاع سياحي/فندقي)',
+    hotel_saudi_lbl: 'موظفي استقبال سعوديين',
+    hotel_expat_lbl: 'موظفي استقبال غير سعوديين',
+    hotel_note: '* النسبة المطلوبة: 100% (مأمور سنترال، موظف استقبال فندق) — تطبيق أبريل 2026',
+    retail_title: '🛒 منافذ بيع الجملة والتجزئة',
+    retail_saudi_lbl: 'موظفين سعوديين بالمنفذ',
+    retail_expat_lbl: 'موظفين غير سعوديين بالمنفذ',
+    retail_note: '* النسبة المطلوبة: 70% لكل منفذ به 4 موظفين فأكثر — محسوبة على المنفذ وليس المنشأة',
+    housing_title: '🏗️ مشرفو المسكن (مجمعات 20 مستفيد فأكثر)',
+    housing_saudi_lbl: 'مشرفو مسكن سعوديين (راتب 5000+)',
+    housing_expat_lbl: 'مشرفو مسكن غير سعوديين',
+    housing_note: '* النسبة المطلوبة: 100% — تطبيق فبراير 2026',
+    relax_title: '💆 مراكز الاسترخاء والعناية الشخصية (مهن إدارية)',
+    relax_saudi_lbl: 'موظفين إداريين/مساندة سعوديين',
+    relax_expat_lbl: 'موظفين إداريين/مساندة غير سعوديين',
+    relax_note: '* النسبة المطلوبة: 100% على المهن الإدارية والمساندة — تطبيق مايو 2026',
+    school_title: '📚 مدارس التعليم الأهلي (منهج وطني)',
+    school_saudi_lbl: 'معلمي الهوية الوطنية سعوديين',
+    school_expat_lbl: 'معلمي الهوية الوطنية غير سعوديين',
+    school_note: '* النسبة المطلوبة: 50% على معلمي الدين والعربي والاجتماعيات — لا يسري على المناهج الدولية',
+    calc_btn: '🔢 احسب النطاق والتنبيهات',
+    result_title: 'نتيجة نطاقات المطور',
+    badge_label: 'نطاق المنشأة الحالي',
+    stat_total_lbl: 'إجمالي العمالة',
+    stat_saudi_lbl: 'السعوديون المحتسبون',
+    stat_pct_lbl: 'نسبة التوطين',
+    thresh_red: 'أحمر ↔ أخضر منخفض',
+    thresh_mid_lbl: 'أخضر متوسط',
+    thresh_high_lbl: 'أخضر مرتفع',
+    thresh_plat_lbl: 'بلاتيني',
+    thresh_min: 'الحد الأدنى',
+    current_rate: 'النسبة الحالية',
+    warn_title: 'تنبيهات التوطين المهني المستقل',
+    warn_desc: 'هذه القرارات تطبق بغض النظر عن نطاق المنشأة',
+    warn_placeholder: 'أدخل البيانات واضغط احسب لرؤية التنبيهات',
+    no_warn: '✅ لا توجد قرارات توطين مهني مسجلة لمنشأتك',
+    alert_select: 'اختر النشاط الاقتصادي أولاً — ابحث واختر من القائمة',
+    alert_empty: 'أدخل عدد الموظفين أولاً',
+    platinum: '⭐ بلاتيني', green_high: '🟢 أخضر مرتفع', green_mid: '🟡 أخضر متوسط',
+    green_low: '🟠 أخضر منخفض', red_level: '🔴 أحمر',
+    top_level: '🎉 أنت في أعلى نطاق — حافظ على مستواك!',
+    next_prefix: 'للوصول لـ', next_need: 'تحتاج', next_extra: 'سعودي إضافي', next_close: 'أنت قريب جداً ✓', next_limit: 'الحد',
+    saudization_rate: 'نسبة السعودة: ',
+    small_green: 'أخضر', small_red: 'أحمر',
+    small_hint_need: 'وظّف سعودياً واحداً على الأقل للدخول للأخضر',
+    small_hint_ok: 'أنت في النطاق الأخضر ✓',
+    small_badge_pct: 'كيان صغير (فئة أ) — يحتاج سعودي واحد على الأقل',
+    na: 'لا ينطبق',
+  },
+  en: {
+    title: 'Nitaqat Motawar Calculator by Mural',
+    subtitle: 'Calculate your Nitaqat level and professional localization alerts — all in one place',
+    credit: 'Prepared by Ibrahim',
+    est_info: 'Establishment Information',
+    activity_label: 'Primary Economic Activity (registered in Qiwa)',
+    activity_placeholder: 'Type to search or press ▼ to show all...',
+    saudi_div: 'Saudi Employees (contracts documented in Qiwa)',
+    saudi_full_lbl: 'Regular Saudi (full-time)',
+    saudi_part_lbl: 'Saudi Part-time <small style="color:var(--warn)">(×0.5)</small>',
+    saudi_student_lbl: 'Saudi Student <small style="color:var(--warn)">(×0.5, cap 10%)</small>',
+    saudi_disabled_lbl: 'Saudi with Special Needs',
+    cert_lbl: 'Establishment has a Muwaa\'ama Certificate <small style="color:var(--text2)">(required if +50 employees)</small>',
+    disabled_note: 'Under 50 employees → ×4 automatically | Over 50 without certificate → ×1',
+    cap10: '✓ Maximum cap: 10% of Saudi employees',
+    saudi_lowsal_lbl: 'Saudi with salary 3,000–4,000 SAR <small style="color:var(--warn)">(×0.5)</small>',
+    saudi_zerosal_lbl: 'Saudi with salary below 3,000 SAR <small style="color:var(--red)">(×0 not counted)</small>',
+    saudi_excon_lbl: 'Saudi ex-convict / released <small style="color:var(--green-high)">(×2, cap 10%)</small>',
+    one_x_div: 'Categories counted as 1 Saudi (×1)',
+    one_x_desc: 'These categories count exactly like a regular Saudi in the localization rate',
+    saudi_remote_lbl: 'Saudi remote worker',
+    saudi_son_lbl: 'Son/daughter of a Saudi mother',
+    saudi_widow_lbl: 'Mother/widow of a Saudi',
+    saudi_tribe_lbl: 'Employees from displaced tribes',
+    saudi_gulf_lbl: 'GCC nationals + GCC athletes',
+    saudi_owner_lbl: 'Owner (Saudi or non-Saudi)',
+    saudi_seconded_lbl: 'Seconded Saudi employee',
+    saudi_flex_lbl: 'Flexible work <small style="color:var(--warn)">(×⅓, requires 168 hrs/month)</small>',
+    expat_div: 'Non-Saudi Employees',
+    expat_normal_lbl: 'Regular expatriate',
+    expat_pales_lbl: 'Palestinian/Baluchi <small style="color:var(--green-mid)">(×0.25)</small>',
+    expat_burma_lbl: 'Burmese outside Makkah/Madinah <small style="color:var(--green-mid)">(not counted)</small>',
+    spouse_note: '* Expatriate spouse is not counted on either side | Saudi under 3,000 SAR is counted in total workforce but not in localization rate',
+    small_entity_lbl: 'Small entity category (A) — 5 employees or fewer',
+    prof_title: 'Professions Subject to Independent Localization Decisions',
+    prof_desc: 'These decisions apply regardless of your Nitaqat level — enter counts for each profession if applicable',
+    acc_title: '🧾 Accountants',
+    acc_saudi_lbl: 'Saudi accountants (certified, salary 6,000+)',
+    acc_expat_lbl: 'Non-Saudi accountants',
+    acc_note: '* Required rate: 40% currently (Oct 2025) — increases gradually to 70% by 2029',
+    eng_title: '⚙️ Engineers',
+    eng_saudi_lbl: 'Saudi engineers (certified, salary 8,000+)',
+    eng_expat_lbl: 'Non-Saudi engineers',
+    eng_note: '* Required rate: 30% — from 5 engineers and above — effective June 2026',
+    sport_title: '🏋️ Sports Trainers (gyms/sports centers)',
+    sport_saudi_lbl: 'Saudi trainers',
+    sport_expat_lbl: 'Non-Saudi trainers',
+    sport_note: '* Required rate: 15% — from 4 trainers and above — effective November 2026',
+    hotel_title: '🏨 Receptionists (tourism/hospitality)',
+    hotel_saudi_lbl: 'Saudi receptionists',
+    hotel_expat_lbl: 'Non-Saudi receptionists',
+    hotel_note: '* Required rate: 100% (hotel receptionist, switchboard operator) — effective April 2026',
+    retail_title: '🛒 Wholesale & Retail Outlets',
+    retail_saudi_lbl: 'Saudi employees at outlet',
+    retail_expat_lbl: 'Non-Saudi employees at outlet',
+    retail_note: '* Required rate: 70% per outlet with 4+ employees — calculated per outlet, not per establishment',
+    housing_title: '🏗️ Housing Supervisors (20+ beneficiary complexes)',
+    housing_saudi_lbl: 'Saudi housing supervisors (salary 5,000+)',
+    housing_expat_lbl: 'Non-Saudi housing supervisors',
+    housing_note: '* Required rate: 100% — effective February 2026',
+    relax_title: '💆 Relaxation Centers (administrative roles)',
+    relax_saudi_lbl: 'Saudi admin/support employees',
+    relax_expat_lbl: 'Non-Saudi admin/support employees',
+    relax_note: '* Required rate: 100% for admin & support roles — effective May 2026',
+    school_title: '📚 Private Schools (national curriculum)',
+    school_saudi_lbl: 'Saudi national identity teachers',
+    school_expat_lbl: 'Non-Saudi national identity teachers',
+    school_note: '* Required rate: 50% for religious, Arabic & social studies teachers — does not apply to international curricula',
+    calc_btn: '🔢 Calculate Nitaqat & Alerts',
+    result_title: 'Nitaqat Motawar Result',
+    badge_label: 'Establishment\'s Current Nitaqat Level',
+    stat_total_lbl: 'Total Workforce',
+    stat_saudi_lbl: 'Counted Saudis',
+    stat_pct_lbl: 'Localization Rate',
+    thresh_red: 'Red ↔ Low Green',
+    thresh_mid_lbl: 'Mid Green',
+    thresh_high_lbl: 'High Green',
+    thresh_plat_lbl: 'Platinum',
+    thresh_min: 'Minimum',
+    current_rate: 'Current Rate',
+    warn_title: 'Professional Localization Alerts',
+    warn_desc: 'These decisions apply regardless of your Nitaqat level',
+    warn_placeholder: 'Enter data and press Calculate to see alerts',
+    no_warn: '✅ No professional localization decisions registered for your establishment',
+    alert_select: 'Please select the economic activity first — search and choose from the list',
+    alert_empty: 'Please enter the number of employees first',
+    platinum: '⭐ Platinum', green_high: '🟢 High Green', green_mid: '🟡 Mid Green',
+    green_low: '🟠 Low Green', red_level: '🔴 Red',
+    top_level: '🎉 You are at the highest level — maintain your status!',
+    next_prefix: 'To reach', next_need: 'you need', next_extra: 'additional Saudi(s)', next_close: 'You\'re very close ✓', next_limit: 'Threshold',
+    saudization_rate: 'Localization Rate: ',
+    small_green: 'Green', small_red: 'Red',
+    small_hint_need: 'Hire at least one Saudi to enter the Green level',
+    small_hint_ok: 'You are in the Green level ✓',
+    small_badge_pct: 'Small entity (A) — requires at least one Saudi',
+    na: 'N/A',
+  }
+};
+
+function t(key) { return i18n[currentLang][key] || i18n['ar'][key] || key; }
+
+function toggleLang() {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  const isAr = currentLang === 'ar';
+  document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+  document.documentElement.setAttribute('lang', currentLang);
+  document.getElementById('lang-btn').textContent = isAr ? 'EN' : 'عربي';
+
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.innerHTML = t(key);
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = t(key);
+  });
+
+  // Update warnings panel title
+  const warnTitle = document.querySelector('.card-title .icon-amber');
+  if (warnTitle && warnTitle.parentElement) {
+    const span = warnTitle.parentElement.querySelector('[data-i18n="warn_title"]');
+    if (span) span.innerHTML = t('warn_title');
+  }
+
+  // Reset warnings placeholder if visible
+  const warnContainer = document.getElementById('warnings-container');
+  if (warnContainer && warnContainer.querySelector('[data-i18n="warn_placeholder"]')) {
+    warnContainer.innerHTML = `<div style="text-align:center;color:var(--text2);padding:2rem;font-size:0.9rem" data-i18n="warn_placeholder">${t('warn_placeholder')}</div>`;
+  }
+}
+
 // =================== DATA ===================
 const activities = [
   {name:"الإنتاج الزراعي والحيواني وخدماتها وأندية الفروسية",data:[{t:"أخضر منخفض",m:0.19,y1:4.38},{t:"أخضر متوسط",m:0.58,y1:5.13},{t:"أخضر مرتفع",m:0.58,y1:9.38},{t:"بلاتيني",m:0.58,y1:14.38}]},
@@ -850,7 +1090,7 @@ function getNum(id) { return parseInt(document.getElementById(id).value) || 0; }
 
 function calculate() {
   const actIdx = document.getElementById('activity').value;
-  if (actIdx === '') { alert('اختر النشاط الاقتصادي أولاً — ابحث واختر من القائمة'); return; }
+  if (actIdx === '') { alert(t('alert_select')); return; }
 
   const isSmall = document.getElementById('small_entity').checked;
 
@@ -882,7 +1122,7 @@ function calculate() {
                      + saudiLowSalary + saudiZeroSalary + saudiOneX + saudiFlexible
                      + expatNormal + expatPales + expatBurma;
 
-  if (totalWorkers === 0) { alert('أدخل عدد الموظفين أولاً'); return; }
+  if (totalWorkers === 0) { alert(t('alert_empty')); return; }
 
   // Effective expat count
   const effectiveExpat = expatNormal + (expatPales * 0.25) + 0; // Burma = 0 outside makkah
@@ -937,15 +1177,14 @@ function calculate() {
   if (isSmall) {
     const badge = document.getElementById('nitaqat-badge');
     badge.className = 'nitaqat-result ' + (saudiPct > 0 ? 'badge-green-mid' : 'badge-red');
-    badge.querySelector('.badge-name').textContent = saudiPct > 0 ? 'أخضر' : 'أحمر';
-    badge.querySelector('.badge-pct').textContent = 'كيان صغير (فئة أ) — يحتاج سعودي واحد على الأقل';
+    badge.querySelector('.badge-name').textContent = saudiPct > 0 ? t('small_green') : t('small_red');
+    badge.querySelector('.badge-pct').textContent = t('small_badge_pct');
     document.getElementById('thresh-low').textContent = '> 0%';
-    document.getElementById('thresh-mid').textContent = 'لا ينطبق';
-    document.getElementById('thresh-high').textContent = 'لا ينطبق';
-    document.getElementById('thresh-plat').textContent = 'لا ينطبق';
+    document.getElementById('thresh-mid').textContent = t('na');
+    document.getElementById('thresh-high').textContent = t('na');
+    document.getElementById('thresh-plat').textContent = t('na');
     document.getElementById('next-hint-text').textContent = isSmall && saudiPct === 0
-      ? 'وظّف سعودياً واحداً على الأقل للدخول للأخضر'
-      : 'أنت في النطاق الأخضر ✓';
+      ? t('small_hint_need') : t('small_hint_ok');
     updateProgress(saudiPct, 1);
     buildWarnings();
     return;
@@ -966,27 +1205,27 @@ function calculate() {
 
   // Determine level
   let level, badgeClass, badgeName;
-  if (saudiPct >= tPlat) { level = 4; badgeClass = 'badge-platinum'; badgeName = '⭐ بلاتيني'; }
-  else if (saudiPct >= tHigh) { level = 3; badgeClass = 'badge-green-high'; badgeName = '🟢 أخضر مرتفع'; }
-  else if (saudiPct >= tMid) { level = 2; badgeClass = 'badge-green-mid'; badgeName = '🟡 أخضر متوسط'; }
-  else if (saudiPct >= tLow) { level = 1; badgeClass = 'badge-green-low'; badgeName = '🟠 أخضر منخفض'; }
-  else { level = 0; badgeClass = 'badge-red'; badgeName = '🔴 أحمر'; }
+  if (saudiPct >= tPlat) { level = 4; badgeClass = 'badge-platinum'; badgeName = t('platinum'); }
+  else if (saudiPct >= tHigh) { level = 3; badgeClass = 'badge-green-high'; badgeName = t('green_high'); }
+  else if (saudiPct >= tMid) { level = 2; badgeClass = 'badge-green-mid'; badgeName = t('green_mid'); }
+  else if (saudiPct >= tLow) { level = 1; badgeClass = 'badge-green-low'; badgeName = t('green_low'); }
+  else { level = 0; badgeClass = 'badge-red'; badgeName = t('red_level'); }
 
   const badge = document.getElementById('nitaqat-badge');
   badge.className = 'nitaqat-result ' + badgeClass;
   badge.querySelector('.badge-name').textContent = badgeName;
-  badge.querySelector('.badge-pct').textContent = 'نسبة السعودة: ' + saudiPct.toFixed(2) + '%';
+  badge.querySelector('.badge-pct').textContent = t('saudization_rate') + saudiPct.toFixed(2) + '%';
 
   // Next hint
   const hintEl = document.getElementById('next-hint-text');
   if (level === 4) {
-    hintEl.textContent = '🎉 أنت في أعلى نطاق — حافظ على مستواك!';
+    hintEl.textContent = t('top_level');
   } else {
     const nextThresh = [tLow, tMid, tHigh, tPlat][level];
-    const nextName = ['أخضر منخفض','أخضر متوسط','أخضر مرتفع','بلاتيني'][level];
-    const neededPct = nextThresh;
-    const neededSaudi = Math.ceil((neededPct / 100) * effectiveTotal - effectiveSaudi);
-    hintEl.innerHTML = `للوصول لـ <span>${nextName}</span> تحتاج <span>${neededSaudi > 0 ? neededSaudi + ' سعودي إضافي' : 'أنت قريب جداً ✓'}</span> (الحد: ${neededPct.toFixed(1)}%)`;
+    const nextNames = [t('green_low'), t('green_mid'), t('green_high'), t('platinum')];
+    const nextName = nextNames[level];
+    const neededSaudi = Math.ceil((nextThresh / 100) * effectiveTotal - effectiveSaudi);
+    hintEl.innerHTML = `${t('next_prefix')} <span>${nextName}</span> ${t('next_need')} <span>${neededSaudi > 0 ? neededSaudi + ' ' + t('next_extra') : t('next_close')}</span> (${t('next_limit')}: ${nextThresh.toFixed(1)}%)`;
   }
 
   updateProgress(saudiPct, tPlat);
@@ -1148,7 +1387,7 @@ function buildWarnings() {
   }
 
   if (warnings.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--green-high);padding:1.5rem;font-size:0.9rem">✅ لا توجد قرارات توطين مهني مسجلة لمنشأتك</div>';
+    container.innerHTML = `<div style="text-align:center;color:var(--green-high);padding:1.5rem;font-size:0.9rem">${t('no_warn')}</div>`;
     return;
   }
 
