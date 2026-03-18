@@ -400,8 +400,12 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
             </div>
           </div>
           <div>
-            <label>سعودي راتبه أقل من 4,000 ريال <small style="color:var(--warn)">(×0.5)</small></label>
+            <label>سعودي راتبه بين 3,000 و4,000 ريال <small style="color:var(--warn)">(×0.5)</small></label>
             <input type="number" id="saudi_lowsalary" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>سعودي راتبه أقل من 3,000 ريال <small style="color:var(--red)">(×0 لا يُحسب)</small></label>
+            <input type="number" id="saudi_zerosalary" min="0" value="0" placeholder="0">
           </div>
           <div>
             <label>سعودي ذوو سوابق ومفرج عنهم <small style="color:var(--green-high)">(×2، حد 10%)</small></label>
@@ -409,6 +413,44 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
             <div style="font-size:0.78rem;color:var(--green-high);margin-top:0.25rem">
               ✓ حد أقصى 10% من السعوديين
             </div>
+          </div>
+        </div>
+
+        <div class="section-divider">فئات محتسبة كسعودي واحد ×1</div>
+        <p style="font-size:0.78rem;color:var(--text2);margin-bottom:0.75rem">هذه الفئات تُحسب مثل السعودي العادي تماماً في نسبة التوطين</p>
+
+        <div class="form-grid">
+          <div>
+            <label>سعودي موظف عن بُعد</label>
+            <input type="number" id="saudi_remote" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>ابن/ابنة مواطنة</label>
+            <input type="number" id="saudi_son" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>أم/أرملة مواطن</label>
+            <input type="number" id="saudi_widow" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>موظفون من القبائل النازحة</label>
+            <input type="number" id="saudi_tribe" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>مواطنو دول الخليج + رياضيون خليجيون</label>
+            <input type="number" id="saudi_gulf" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>المالك (سعودي أو غير سعودي)</label>
+            <input type="number" id="saudi_owner" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>موظف سعودي مُعار</label>
+            <input type="number" id="saudi_seconded" min="0" value="0" placeholder="0">
+          </div>
+          <div>
+            <label>عمل مرن <small style="color:var(--warn)">(×⅓، بشرط 168 ساعة/شهر)</small></label>
+            <input type="number" id="saudi_flexible" min="0" value="0" placeholder="0">
           </div>
         </div>
 
@@ -429,7 +471,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
           </div>
         </div>
 
-        <p class="note">* زوج/زوجة الوافد لا يحسبون في أي طرف</p>
+        <p class="note">* زوج/زوجة الوافد لا يحسبون في أي طرف | السعودي أقل من 3,000 ريال يدخل في العدد الكلي لكن لا يُحسب في نسبة التوطين</p>
 
         <!-- SMALL ENTITY -->
         <div style="margin-top:1rem">
@@ -819,12 +861,25 @@ function calculate() {
   const saudiDisabled = getNum('saudi_disabled');
   const saudiExcon = getNum('saudi_excon');
   const saudiLowSalary = getNum('saudi_lowsalary');
+  const saudiZeroSalary = getNum('saudi_zerosalary');
+  const saudiRemote = getNum('saudi_remote');
+  const saudiSon = getNum('saudi_son');
+  const saudiWidow = getNum('saudi_widow');
+  const saudiTribe = getNum('saudi_tribe');
+  const saudiGulf = getNum('saudi_gulf');
+  const saudiOwner = getNum('saudi_owner');
+  const saudiSeconded = getNum('saudi_seconded');
+  const saudiFlexible = getNum('saudi_flexible');
   const expatNormal = getNum('expat_normal');
   const expatPales = getNum('expat_pales');
   const expatBurma = getNum('expat_burma');
 
+  // الفئات المحتسبة ×1
+  const saudiOneX = saudiRemote + saudiSon + saudiWidow + saudiTribe + saudiGulf + saudiOwner + saudiSeconded;
+
   // Calculate effective totals
-  const totalWorkers = saudiFull + saudiPart + saudiStudent + saudiDisabled + saudiExcon + saudiLowSalary
+  const totalWorkers = saudiFull + saudiPart + saudiStudent + saudiDisabled + saudiExcon
+                     + saudiLowSalary + saudiZeroSalary + saudiOneX + saudiFlexible
                      + expatNormal + expatPales + expatBurma;
 
   if (totalWorkers === 0) { alert('أدخل عدد الموظفين أولاً'); return; }
@@ -836,7 +891,8 @@ function calculate() {
   const hasCert = document.getElementById("has_muwaa'ama").checked;
 
   // إجمالي السعوديين الفعليين (بدون الضاربات) لحساب الحدود
-  const totalSaudiRaw = saudiFull + saudiPart + saudiStudent + saudiDisabled + saudiExcon + saudiLowSalary;
+  const totalSaudiRaw = saudiFull + saudiPart + saudiStudent + saudiDisabled + saudiExcon
+                      + saudiLowSalary + saudiZeroSalary + saudiOneX + saudiFlexible;
 
   // حد الطلاب: 10% من السعوديين (×0.5 للكل تحت الحد، ×0.5 للمحتسبين فقط للباقي)
   const maxStudentCap = totalSaudiRaw * 0.1;
@@ -859,7 +915,8 @@ function calculate() {
 
   const needsCertificate = !hasCert && saudiDisabled > 0;
 
-  const effectiveSaudi = saudiFull + (saudiPart * 0.5) + (effStudents * 0.5) + effDisabledScore + effExconScore + (saudiLowSalary * 0.5);
+  const effectiveSaudi = saudiFull + (saudiPart * 0.5) + (effStudents * 0.5) + effDisabledScore + effExconScore
+                       + (saudiLowSalary * 0.5) + saudiOneX + (saudiFlexible * (1/3));
   const effectiveTotal = effectiveSaudi + effectiveExpat;
 
   const saudiPct = effectiveTotal > 0 ? (effectiveSaudi / effectiveTotal) * 100 : 0;
